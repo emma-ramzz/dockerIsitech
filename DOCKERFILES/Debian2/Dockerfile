@@ -48,4 +48,4 @@ WORKDIR  ${DOCUMENTROOT}
 
 
 # DÉMARRAGE DES SERVICES LORS DE L'EXÉCUTION DE L'IMAGE
-ENTRYPOINT service mysql start && mysql < /articles.sql && apache2ctl -D FOREGROUND
+CMD service mysql start && mysql < /articles.sql && apache2ctl -D FOREGROUND
