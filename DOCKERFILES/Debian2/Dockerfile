@@ -4,7 +4,7 @@ FROM debian:stable-slim
 
 
 # MÉTADONNÉES DE L'IMAGE
-LABEL version="1.0" maintainer="AJDAINI Hatim <ajdaini.hatim@gmail.com>"
+LABEL version="1.0" maintainer="RAMIREZ Emma <emma.ramirez@ecole-isitech.fr>"
 
 
 # VARIABLES TEMPORAIRES
@@ -48,4 +48,4 @@ WORKDIR  ${DOCUMENTROOT}
 
 
 # DÉMARRAGE DES SERVICES LORS DE L'EXÉCUTION DE L'IMAGE
-CMD service mysql start && mysql < /articles.sql && apache2ctl -D FOREGROUND
+ENTRYPOINT service mysql start && mysql < /articles.sql && apache2ctl -D FOREGROUND
