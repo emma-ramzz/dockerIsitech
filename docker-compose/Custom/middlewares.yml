@@ -1,0 +1,14 @@
+http:
+  middlewares:
+    SecHeader:
+      headers:
+        forceSTSHeader: true
+        stsIncludeSubdomains: true
+        stsSeconds: 31536000
+        sslRedirect: true
+        sslForceHost: true
+        sslHost: 127.0.0.1
+
+        frameDeny: true
+        contentTypeNosniff: true
+        browserXssFilter: true

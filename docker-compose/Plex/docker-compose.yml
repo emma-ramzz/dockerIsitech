@@ -1,0 +1,69 @@
+version: '3.7'
+services:
+  traefik:
+    image: traefik:2.1
+    container_name: traefik
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./custom/:/etc/traefik/custom/:ro
+      - traefik_ssl:/letsencrypt
+    networks:
+      - traefik
+
+  plex:
+    container_name: plex
+    image: plexinc/pms-docker
+    restart: always
+    hostname: 127.0.0.1
+    environment:
+      - TZ='Europe/Paris'
+      - PLEX_CLAIM='claim-MZN22zKbD4-fUZf4FhQT'
+      - ADVERTISE_IP=https://127.0.0.1
+    ports:
+      - 32400:32400/tcp
+      - 3005:3005/tcp
+      - 8324:8324/tcp
+      - 32469:32469/tcp
+      - 1900:1900/udp
+      - 32410:32410/udp
+      - 32412:32412/udp
+      - 32413:32413/udp
+      - 32414:32414/udp
+    volumes:
+      - plex_config:/config
+      - plex_transcode:/transcode
+      - plex_data:/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.plex.loadbalancer.server.port=32400"
+      - "traefik.http.routers.plex.rule=Host(`test.domain.com`)"
+      - "traefik.http.routers.plex.middlewares=SecHeader@file"
+      - "traefik.http.routers.plex-https.rule=Host(`test.domain.com`)"
+      - "traefik.http.routers.plex-https.entrypoints=https"
+      - "traefik.http.routers.plex-https.tls=true"
+      - "traefik.http.routers.plex-https.tls.certresolver=myhttpchallenge"
+      - "traefik.http.routers.plex-https.middlewares=SecHeader@file"
+    networks:
+      - traefik
+
+volumes:
+  plex_config:
+    name: plex_config
+
+  plex_transcode:
+    name: plex_transcode
+
+  plex_data:
+    name: plex_data
+
+  traefik_ssl:
+    name: traefik_ssl
+
+networks:
+  traefik:
+    name: traefik

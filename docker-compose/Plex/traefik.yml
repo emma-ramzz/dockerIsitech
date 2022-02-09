@@ -1,0 +1,22 @@
+entryPoints:
+    http:
+      address: :80
+
+    https:
+      address: :443
+
+providers:
+  docker:
+    exposedByDefault: false
+
+  file:
+    directory: /etc/traefik/custom/
+    watch: true
+
+certificatesResolvers:
+  myhttpchallenge:
+    acme:
+      email: "emma.ramirez@ecole-isitech.fr"
+      storage: "/letsencrypt/acme.json"
+      httpChallenge:
+        entryPoint: http
