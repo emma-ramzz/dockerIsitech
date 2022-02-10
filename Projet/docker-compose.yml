@@ -1,0 +1,13 @@
+version: "3.7"
+services:
+  plex:
+    container_name: Projet_plex
+    image: plex_img
+    network_mode: bridge
+    restart: unless-stopped
+    ports:
+      - "32400:32400"
+    volumes:
+      - /var/lib/plexmediaserver/docker/plex/config:/config
+      - /var/lib/plexmediaserver/Media/Movies:/data/Movies:ro
+      - /var/lib/plexmediaserver/Media/Television:/data/Television:ro
